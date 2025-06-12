@@ -50,7 +50,8 @@ router.post('/login', validateAuthBody, async (req, res) => {
             global.user = user;
             res.json({
                 success : true,
-                message : 'User logged in successfully'
+                message : 'User logged in successfully',
+                user : user
             });
         } else {
             res.status(400).json({

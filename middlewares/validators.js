@@ -33,3 +33,15 @@ export function validateOrderBody(req, res, next) {
         });
     }
 }
+
+export function validateProductBody(req, res, next) {
+    const { title, desc, price } = req.body;
+    if(title && desc && price) {
+        next();
+    } else {
+        next({
+            status : 400,
+            message : 'Title, desc and price is required'
+        });
+    }
+}
