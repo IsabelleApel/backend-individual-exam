@@ -35,14 +35,14 @@ adminRouter.post('/', validateProductBody, async (req, res, next) => {
         price: price
     })
     if(result) {
-        res.json({
+        res.status(201).json({
             success : true,
             product : result
         })
     } else {
         next({
-            status : 404,
-            message : 'Product NOT added successfully'
+            status : 500,
+            message : 'Internal server error: failed to add product'
         })
     }
 });
@@ -64,14 +64,14 @@ adminRouter.put('/:prodId', validateProductBody, async (req, res, next) => {
     } else {
         next({
             status : 404,
-            message : 'Product NOT updated successfully'
+            message : 'Update failed: Product not found'
         })
     }
 });
 
 //DELETE product
 adminRouter.delete('/:prodId', async (req, res, next) => {
-    const {prodId} = req.params;
+    const { prodId } = req.params;
     const result = await deleteProduct(prodId);
     if(result) {
         res.json({

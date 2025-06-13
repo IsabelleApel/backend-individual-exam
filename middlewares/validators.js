@@ -45,3 +45,4 @@ export function validateProductBody(req, res, next) {
         });
     }
 }
+

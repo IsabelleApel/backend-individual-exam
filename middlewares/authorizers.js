@@ -10,15 +10,13 @@ export function authenticateUser(req, res, next) {
             next();
         } else {
             next({
-                status : 400,
-                message : error.name === 'TokenExpiredError' 
-                    ? 'Session expired. Please log in again.' 
-                    : 'Invalid token'
+                status : 401,
+                message : 'No valid token'
             })  
         }
     } else {
         next({
-            status : 400,
+            status : 401,
             message : 'No token provided'
         })
     }
@@ -31,13 +29,13 @@ export async function authorizeAdmin(req, res, next) {
                 next();
             } else {
                 next({
-                    status : 400,
-                    message : 'No access'
+                    status : 403,
+                    message : 'Access denied: admin role required'
                 })  
             }
         } else {
             next({
-                status : 400,
+                status : 401,
                 message : 'No token found'
             })
         }
