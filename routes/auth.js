@@ -6,20 +6,20 @@ import { comparePasswords, getToken, hashPassword } from '../utils/index.js';
 
 const router = Router();
 
-router.get('/logout', (req, res, next) => {
-    if(global.user) {
-        global.user = null;
-        res.json({
-            success: true,
-            message: 'User logged out successfully'
-        });
-    } else {
-        next({
-            status: 400,
-            message: 'No user is currently logged in'
-        });
-    }
-});
+// router.get('/logout', (req, res, next) => {
+//     if(global.user) {
+//         global.user = null;
+//         res.json({
+//             success: true,
+//             message: 'User logged out successfully'
+//         });
+//     } else {
+//         next({
+//             status: 400,
+//             message: 'No user is currently logged in'
+//         });
+//     }
+// });
 
 router.post('/register', validateAuthBody, async (req, res) => {
     const { username, password } = req.body;

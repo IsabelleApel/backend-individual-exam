@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import { validateCartBody } from '../middlewares/validators.js';
 import { getProduct } from '../services/menu.js';
-import { getUser } from '../services/users.js';
+import { getUser, getUserByUserId } from '../services/users.js';
 import { getCarts, getCart, updateCart } from '../services/cart.js';
 import { v4 as uuid } from 'uuid';
+import { authenticateUser } from '../middlewares/authorizers.js';
 
 const router = Router();
 
@@ -37,10 +38,10 @@ router.get('/:cartId', async (req, res, next) => {
     }
 })
 
-router.put('/', validateCartBody, async (req, res, next) => {
+router.put('/', authenticateUser, validateCartBody,  async (req, res, next) => {
     const { prodId, qty, guestId } = req.body;
-    if(global.user) {
-        const user = await getUser(global.user.username);
+    if(req.user) {
+        const user = await getUserByUserId(req.user.userId);
         if(user) {
             const product = await getProduct(prodId);
             if(product) {

@@ -19,3 +19,13 @@ export function getToken(payload) {
     );
     return token;
 }
+
+export function verifyToken(token) {
+    try {
+        const decoded = jwt.verify(token, process.env.MYSUPERSECRET);
+        return decoded;
+    } catch(error) {
+        console.log(error.message);
+        return null;
+    }
+}

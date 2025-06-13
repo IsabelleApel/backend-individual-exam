@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { getMenu, addProduct, updateProduct, deleteProduct } from '../services/menu.js';
 import { validateProductBody } from '../middlewares/validators.js';
 import { v4 as uuid } from 'uuid';
-import { authorizeAdmin } from '../middlewares/authorizers.js';
+import { authenticateUser, authorizeAdmin } from '../middlewares/authorizers.js';
 
 const router = Router();
 
@@ -21,8 +21,12 @@ router.get('/', async (req, res, next) => {
     }
 })
 
+const adminRouter = Router();
+
+adminRouter.use(authenticateUser, authorizeAdmin)
+
 //POST add new product
-router.post('/', validateProductBody, authorizeAdmin, async (req, res, next) => {
+adminRouter.post('/', validateProductBody, async (req, res, next) => {
     const {title, desc, price} = req.body;
     const result = await addProduct({
         prodId: `prod-${uuid().substring(0, 5)}`,
@@ -44,7 +48,7 @@ router.post('/', validateProductBody, authorizeAdmin, async (req, res, next) => 
 });
 
 //PUT update product
-router.put('/:prodId', validateProductBody, authorizeAdmin , async (req, res, next) => {
+adminRouter.put('/:prodId', validateProductBody, async (req, res, next) => {
     const { prodId } = req.params;
     const {title, desc, price} = req.body;
     const result = await updateProduct(prodId, {
@@ -66,7 +70,7 @@ router.put('/:prodId', validateProductBody, authorizeAdmin , async (req, res, ne
 });
 
 //DELETE product
-router.delete('/:prodId', authorizeAdmin, async (req, res, next) => {
+adminRouter.delete('/:prodId', async (req, res, next) => {
     const {prodId} = req.params;
     const result = await deleteProduct(prodId);
     if(result) {
@@ -81,5 +85,7 @@ router.delete('/:prodId', authorizeAdmin, async (req, res, next) => {
         })
     }
 });
+
+router.use('/', adminRouter);
 
 export default router;
