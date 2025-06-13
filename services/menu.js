@@ -19,3 +19,33 @@ export async function getProduct(prodId) {
         return null;
     }
 }
+
+export async function addProduct(product) {
+    try{
+        const result = await Product.create(product);
+        return result;
+    } catch(error) {
+        console.log(error.message);
+        return null;
+    }
+}
+
+export async function updateProduct(prodId, newProduct) {
+    try{
+        const result = await Product.findOneAndUpdate({ prodId : prodId}, newProduct);
+        return result;
+    } catch(error) {
+        console.log(error.message);
+        return null;
+    }
+}
+
+export async function deleteProduct(prodId) {
+    try{
+        const result = await Product.findOneAndDelete({prodId : prodId});
+        return result;
+    } catch(error) {
+        console.log(error.message);
+        return null;
+    }
+}
