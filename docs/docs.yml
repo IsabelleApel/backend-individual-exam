@@ -3,7 +3,6 @@ info:
   title: Yum yum API
   version: 1.0.0
 openapi: 3.0.1
-components:
 paths:
   /api/menu:
     post:
